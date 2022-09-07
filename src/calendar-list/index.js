@@ -3,13 +3,13 @@ import {
   FlatList, Platform, Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import XDate from 'xdate';
 
 import {xdateToData, parseDate} from '../interface';
 import styleConstructor from './style';
 import dateutils from '../dateutils';
 import Calendar from '../calendar';
 import CalendarListItem from './item';
+import { DateTime } from 'luxon';
 
 const {width} = Dimensions.get('window');
 
@@ -54,10 +54,10 @@ class CalendarList extends Component {
 
     const rows = [];
     const texts = [];
-    const date = parseDate(props.current) || XDate();
+    const date = parseDate(props.current) || DateTime.now();
     for (let i = 0; i <= this.pastScrollRange + this.futureScrollRange; i++) {
       const rangeDate = date.clone().addMonths(i - this.pastScrollRange, true);
-      const rangeDateStr = rangeDate.toString('MMM yyyy');
+      const rangeDateStr = rangeDate.toFormat('MMM yyyy');
       texts.push(rangeDateStr);
       /*
        * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.

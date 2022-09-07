@@ -16,6 +16,7 @@ import MultiPeriodDay from './day/multi-period';
 import SingleDay from './day/custom';
 import CalendarHeader from './header';
 import shouldComponentUpdate from './updater';
+import { DateTime } from 'luxon';
 
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
@@ -85,7 +86,7 @@ class Calendar extends Component {
     if (props.current) {
       currentMonth = parseDate(props.current);
     } else {
-      currentMonth = XDate();
+      currentMonth = DateTime.now();
     }
     this.state = {
       currentMonth
@@ -100,7 +101,7 @@ class Calendar extends Component {
 
   componentWillReceiveProps(nextProps) {
     const current= parseDate(nextProps.current);
-    if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
+    if (current && current.toFormat('yyyy MM') !== this.state.currentMonth.toFormat('yyyy MM')) {
       this.setState({
         currentMonth: current.clone()
       });
@@ -108,7 +109,7 @@ class Calendar extends Component {
   }
 
   updateMonth(day, doNotTriggerListeners) {
-    if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
+    if (day.toFormat('yyyy MM') === this.state.currentMonth.toFormat('yyyy MM')) {
       return;
     }
     this.setState({
@@ -216,7 +217,7 @@ class Calendar extends Component {
     if (!this.props.markedDates) {
       return false;
     }
-    const dates = this.props.markedDates[day.toString('yyyy-MM-dd')] || EmptyArray;
+    const dates = this.props.markedDates[day.toFormat('yyyy-MM-dd')] || EmptyArray;
     if (dates.length || dates) {
       return dates;
     } else {
@@ -250,7 +251,7 @@ class Calendar extends Component {
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
-      const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
+      const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toFormat('yyyy-MM-dd');
       if (this.props.displayLoadingIndicator &&
           !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
         indicator = true;

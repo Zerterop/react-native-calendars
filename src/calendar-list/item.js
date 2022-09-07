@@ -12,7 +12,7 @@ class CalendarListItem extends Component {
   shouldComponentUpdate(nextProps) {
     const r1 = this.props.item;
     const r2 = nextProps.item;
-    return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
+    return r1.toFormat('yyyy MM') !== r2.toFormat('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
   }
 
   render() {

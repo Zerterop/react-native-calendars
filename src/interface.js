@@ -1,4 +1,4 @@
-const XDate = require('xdate');
+const { DateTime } = require('luxon');
 
 function padNumber(n) {
   if (n < 10) {
@@ -7,14 +7,13 @@ function padNumber(n) {
   return n;
 }
 
-function xdateToData(xdate) {
-  const dateString = xdate.toString('yyyy-MM-dd');
+function xdateToData(dt) {
   return {
-    year: xdate.getFullYear(),
-    month: xdate.getMonth() + 1,
-    day: xdate.getDate(),
-    timestamp: XDate(dateString, true).getTime(),
-    dateString: dateString
+    year: dt.year,
+    month: dt.month,
+    day: dt.day,
+    timestamp: dt.startOf('day').toMillis(),
+    dateString: dt.toFormat('yyyy-MM-dd')
   };
 }
 
@@ -22,17 +21,19 @@ function parseDate(d) {
   if (!d) {
     return;
   } else if (d.timestamp) { // conventional data timestamp
-    return XDate(d.timestamp, true);
-  } else if (d instanceof XDate) { // xdate
-    return XDate(d.toString('yyyy-MM-dd'), true);
+    return DateTime.fromMillis(d.timestamp, {zone: 'utc'});
+  } else if (DateTime.isDateTime(d)) { // datetime
+    return DateTime.utc(d.year, d.month, d.day);
   } else if (d.getTime) { // javascript date
     const dateString = d.getFullYear() + '-' + padNumber((d.getMonth() + 1)) + '-' + padNumber(d.getDate());
-    return XDate(dateString, true);
+    return DateTime.fromISO(dateString, {zone: 'utc'});
   } else if (d.year) {
     const dateString = d.year + '-' + padNumber(d.month) + '-' + padNumber(d.day);
-    return XDate(dateString, true);
-  } else if (d) { // timestamp nuber or date formatted as string
-    return XDate(d, true);
+    return DateTime.fromISO(dateString, {zone: 'utc'});
+  } else if (typeof d === 'number') { // timestamp nuber
+    return DateTime.fromMillis(d, {zone: 'utc'});
+  } else if (typeof d === 'string') { // date formatted as string
+    return DateTime.fromISO(d, {zone: 'utc'});
   }
 }
 

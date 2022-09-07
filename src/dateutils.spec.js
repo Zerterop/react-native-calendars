@@ -90,10 +90,10 @@ describe('dateutils', function () {
     it('2014 March', function () {
       const days = dateutils.page(DateTime.utc(2014, 3, 23));
       expect(days.length).toBe(42);
-      expect(days[0].toString())
-        .toBe(DateTime.utc(2014, 2, 23, 0, 0, 0).toString());
-      expect(days[days.length - 1].toString())
-        .toBe(DateTime.utc(2014, 4, 5, 0, 0, 0).toString());
+      expect(days[0].toISO())
+        .toBe(DateTime.utc(2014, 2, 23, 0, 0, 0).toISO());
+      expect(days[days.length - 1].toISO())
+        .toBe(DateTime.utc(2014, 4, 5, 0, 0, 0).toISO());
     });
 
     it('2014 May', function () {
