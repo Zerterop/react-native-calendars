@@ -103,7 +103,7 @@ class Calendar extends Component {
     const current= parseDate(nextProps.current);
     if (current && current.toFormat('yyyy MM') !== this.state.currentMonth.toFormat('yyyy MM')) {
       this.setState({
-        currentMonth: current.clone()
+        currentMonth: current
       });
     }
   }
@@ -113,10 +113,10 @@ class Calendar extends Component {
       return;
     }
     this.setState({
-      currentMonth: day.clone()
+      currentMonth: day
     }, () => {
       if (!doNotTriggerListeners) {
-        const currMont = this.state.currentMonth.clone();
+        const currMont = this.state.currentMonth;
         if (this.props.onMonthChange) {
           this.props.onMonthChange(xdateToData(currMont));
         }
@@ -151,7 +151,7 @@ class Calendar extends Component {
   }
 
   addMonth(count) {
-    this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+    this.updateMonth(this.state.currentMonth.plus( {months: count }));
   }
 
   renderDay(day, id) {
@@ -251,7 +251,7 @@ class Calendar extends Component {
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
-      const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toFormat('yyyy-MM-dd');
+      const lastMonthOfDay = current.endOf('month').toFormat('yyyy-MM-dd');
       if (this.props.displayLoadingIndicator &&
           !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
         indicator = true;

@@ -17,7 +17,7 @@ class CalendarListItem extends Component {
 
   render() {
     const row = this.props.item;
-    if (row.getTime) {
+    if (row.toMillis) {
       return (
         <Calendar
           theme={this.props.theme}
