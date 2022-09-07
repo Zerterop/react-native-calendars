@@ -176,7 +176,7 @@ class Calendar extends Component {
       }
     } else {
       const DayComp = this.getDayComponent();
-      const date = day.getDate();
+      const date = day.day;
       dayComp = (
         <DayComp
           key={id}
